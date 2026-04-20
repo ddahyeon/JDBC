@@ -122,8 +122,27 @@ JDBC ( Java DataBase Connectivity )
   
   6) sql문 전송
      
-     가. DML ( insert, delete, update )
+    가. DML ( insert, delete, update )
+
 	int n = pstmt.executeUpdate(); // n에 레코드 변경 개수값이 저장
 
      나. Select 문
-         = pstmt.executeQuery();
+
+       ex.
+          select deptno,dname,loc from dept;
+	
+	 실행결과:
+	          deptno   dname       loc   <== 컬럼헤더
+		  ---------------------
+                   10      ACCOUNTING  NEW YORK
+                    20     RESEARCH    DALLAS
+
+
+
+       java.sql.ResultSet;  // select 했을때, 
+
+
+       ResultSet rs = pstmt.executeQuery();
+
+
+
