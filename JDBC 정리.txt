@@ -174,3 +174,40 @@ JDBC ( Java DataBase Connectivity )
      
       SQLException 예외가 발생되고, try~catch 필수로 처리해야됨.
  /////////////////////////////////////////////////////////////////////////////////
+6. 트랜잭션 처리
+   - JDBC의 DML은 auto commit임.
+
+
+    Connection con = DriverManager.getConnection(url, userid, passwd);
+
+   try{
+con.setAutoCommit(false);  // 기본값은 true
+
+
+    //insert문
+    //update문
+    
+    con.commit();
+  }catch(SQLException e){
+
+    con.rollback();
+  }
+
+///////////////////////////////////////////
+7. 레이어(Layer) 나누기
+
+                          로직처리+트랜잭션처리
+			  (Connection얻고close함)
+	 화면처리		                     (DB 연동 )
+	 presentation   |  Service      |   persistence   | 
+	 layer          |  layer        |   layer         |     MySQL
+			|               |                 |
+사용자--->	        |               |   
+	  main()        |                   DeptDAO.java
+	 DetpMain.java
+			| DeptSevice.java(인터페이스)
+			  DeptServiceImpl.java ( 인터페이스 구현클래스)
+
+					    DeptDTO.java (dept테이블의 레코드 저장용)
+					    
+	* 각 Layer별로 데이터 전달할 때 사용하는 패턴( DTO 패턴: Data Transfer Object )
