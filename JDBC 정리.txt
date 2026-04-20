@@ -1,0 +1,129 @@
+Jdbc_강좌정리
+
+JDBC ( Java DataBase Connectivity )
+
+1. 개념
+
+   - 자바프로그램언어와 DBMS 연동하는 기술로서 DMBS에 독립적임.
+
+                    JDBC
+    자바프로그램 <---------------------> DBMS(MySQL, Oralce, MS-SQL, DB2,... )
+
+2. 특징
+  - DBMS종류와 무관하게 일관된 방법으로 접근이 가능(DMBS에 독립적임)
+    어떤 DBMS건 동일한 메서드로 접근한다.
+  - JDBC는 비런타임 계열의 예외(SQLException)가 발생됨. 따라서 try~catch 또는 throws로 반드시 예외처리해야 됨.
+  - JDBC는 기본적으로 auto commit임. ( 필요시 비활성 가능 ) 
+
+
+3. 일관된 방법 구현?
+
+   1)자바쪽에서 인터페이스 만듬
+     내부에 추상메서드(ex. pubilc abstract void connect();
+   2) 인터페이스를 DBMS 벤터에 제공
+   3) 벤더에서 클래스를 만들때 인터페이스를 구현
+      ex. public class Oracle implments Connection{
+		pubilc  void connect(){}
+           }
+          public class MySQL implments Connection{
+	       pubilc  void connect(){}
+	  }
+    
+    4) 각 벤더마다 클래스파일들이 만들어지고, 이 클래스파일들(*.jar)과
+       자바프로그램과 연동함.
+       *.jar 파일을 드라이버(driver)라고 부름.
+
+    5) 벤더에서 제공해준 드라이버(driver,jar파일)를
+       자바프로그램에서 사용할 수 있도록 설정이 필요함.
+        
+
+    자바 프로그램                          DBMS
+ ------------------------------------------------
+    java.sql.Connection                MySQL
+    java.sql.PreparedStatement
+
+				       Oracle
+
+
+				       MS-SQL
+
+				       ...
+
+4. mysql 드라이버 다운로드 및 eclipse 에서 설정
+
+   1) mysql 드라이버
+     
+     https://dev.mysql.com/downloads/connector/j
+
+     드라이버명: mysql-connector-j-8.0.33.jar
+   
+
+   2) eclipse에서 드라이버 설정 ( 외부 jar파일를 인식시키는 작업: build path한다고 부름. )
+
+      프로젝트생성 > 생성한 프로젝트 오른쪽 클릭 > build path > Configure build path... >
+      3번 탭의 libraries > Classpath 선택 > Add Externals Jars... > mysql-connector-j-8.0.33.jar 선택
+
+
+5. JDBC 연동
+
+  1) mysql 접속 정보 4가지
+
+     String driver = "com.mysql.cj.jdbc.Driver"; // 핵심이 되는 클래스명
+     String url = "jdbc:mysql://localhost:3306/testdb";
+     String userid ="root";
+     String passwd = "1234";
+
+
+  2) 드라이버 로딩   
+    - "com.mysql.cj.jdbc.Driver" 를 메모리에 올리는 작업의미.
+      그런데 메모리에 올려야되는 클래스명이 문자열로 되어 있음.
+
+     try{
+       Class.forName(driver);  // Class.forName("com.mysql.cj.jdbc.Driver");
+     }catch(ClassNotFoundException e){}
+
+    - ClassNotFoundException 예외가 발생되고, try~catch 필수로 처리해야됨.
+
+  3) Connection 맺기
+	
+        - java와 mysql 연결하는것을 의미.
+
+	java.sql.Connection;
+        java.sql.DriverManager;
+
+	Connection con = DriverManager.getConnection(url, userid, passwd);
+
+
+        SQLException 예외가 발생되고, try~catch 필수로 처리해야됨.
+
+        java프로그램 -------------------------------------MySQL
+		   sql 전달 --------------------------->
+		    <---------------------------------
+	          ------------------------------------- 
+
+  4) sql문 작성
+
+     - 수업에서 배웠던 모든 sql문 사용 가능. (ex. 함수, 조인, 서브쿼리, DML, DDL ,.. )
+     - 문장끝의 ; 반드시 제외.
+
+       String sql = "select deptno, dname, loc from dept";
+
+       String sql = "insert into dept(deptno,dname,loc)values(50,'인사','서울')";
+
+  5) PreparedStatment 얻기 (sql문 전달 객체)
+
+        java.sql.PreparedStatment;
+  
+	PreparedStatment pstmt = con.prepareStatement(sql);
+
+	
+	SQLException 예외가 발생되고, try~catch 필수로 처리해야됨.
+
+  
+  6) sql문 전송
+     
+     가. DML ( insert, delete, update )
+	int n = pstmt.executeUpdate(); // n에 레코드 변경 개수값이 저장
+
+     나. Select 문
+         = pstmt.executeQuery();
