@@ -71,7 +71,7 @@ JDBC ( Java DataBase Connectivity )
      String driver = "com.mysql.cj.jdbc.Driver"; // 핵심이 되는 클래스명
      String url = "jdbc:mysql://localhost:3306/testdb";
      String userid ="root";
-     String passwd = "1234";
+     String passwd = "1234";  // 내 비밀번호 6120 입력
 
 
   2) 드라이버 로딩   
@@ -126,8 +126,9 @@ JDBC ( Java DataBase Connectivity )
 
 	int n = pstmt.executeUpdate(); // n에 레코드 변경 개수값이 저장
 
-     나. Select 문
+    나. Select 문
 
+///////////////////////////////////////////////////////
        ex.
           select deptno,dname,loc from dept;
 	
@@ -137,12 +138,39 @@ JDBC ( Java DataBase Connectivity )
                    10      ACCOUNTING  NEW YORK
                     20     RESEARCH    DALLAS
 
-
-
+	   위 실행결과인 테이블결과를 ResultSet로 표현했음.
+///////////////////////////////////////////////////////
        java.sql.ResultSet;  // select 했을때, 
-
-
        ResultSet rs = pstmt.executeQuery();
 
+          rs==>    deptno   dname       loc  
+		  ---------------------
+                    10      ACCOUNTING  NEW YORK
+                    20     RESEARCH    DALLAS
 
+	  while(rs.next()){  // 행선택
+	 // 열선택
+	     int deptno = rs.getInt("deptno"); // rs.getInt(1); 
+	     String dname = rs.getString("dname"); // rs.getString(2);
+             String loc = rs.getString("loc"); // rs.getString(3);
+	  }
+   
+      SQLException 예외가 발생되고, try~catch 필수로 처리해야됨.
 
+   7) 외부자원은 모두 반납 ( close 작업)
+	
+     - 사용순서
+
+         Connection con;
+	 PreparedStatment pstmt;
+	 ResultSet rs
+
+    
+     - close순서는 사용순서 역순으로 해야 됨.
+
+             rs.close();
+	     pstmt.close();
+	     con.close();
+     
+      SQLException 예외가 발생되고, try~catch 필수로 처리해야됨.
+ /////////////////////////////////////////////////////////////////////////////////
