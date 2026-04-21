@@ -1,5 +1,4 @@
-package exam2_delete;
-
+package exam2_update;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -30,12 +29,12 @@ public class DeptServiceImpl implements DeptService {
 		}
 	}//end 생성자
     @Override 
-	public int delete(int deptno) throws RecordNotFoundException{
+	public int update(DeptDTO dto){
     	int n = 0;
 		Connection con = null;
 	     try {
 			 con = DriverManager.getConnection(url, userid, passwd);
-			 n = dao.delete(con, deptno);
+			 n = dao.update(con, dto);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
