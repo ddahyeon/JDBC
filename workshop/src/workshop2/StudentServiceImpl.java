@@ -13,60 +13,55 @@ public class StudentServiceImpl implements StudentService {
     String userid = "root";
     String passwd = "6120";
 
-    StudentDAO dao;
+    public StudentServiceImpl() { // 생성자에 드라이버 로딩
+		try {
+			Class.forName(driver);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
 
     @Override
-    public void setDAO(StudentDAO dao) {
-        this.dao = dao;
-    }
-
-    public StudentServiceImpl() {
-        try {
-            Class.forName(driver);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
+	public ArrayList<StudentDTO> selectByName(String str){
+		ArrayList<StudentDTO> list = new ArrayList<StudentDTO>();
+		Connection con = null;
+		
+		try {
+			con = DriverManager.getConnection(url, userid, passwd);
+			StudentDAO dao = new StudentDAO();
+			list = dao.selectByName(con, str);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (con != null) con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return list; 
+	}
     @Override
-    public List<StudentDTO> list() {
-        List<StudentDTO> list = new ArrayList<StudentDTO>();
-        Connection con = null;
+	public ArrayList<StudentDTO> selectAllStudent() {
+		ArrayList<StudentDTO> list = new ArrayList<StudentDTO>();
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(url, userid, passwd);
+			StudentDAO dao = new StudentDAO();
+			list = dao.selectAllStudent(con);
 
-        try {
-            con = DriverManager.getConnection(url, userid, passwd);
-            list = dao.list(con);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (con != null) con.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (con != null) con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}
 
-        return list;
-    }
-
-    @Override
-    public List<StudentDTO> searchByName(String name) {
-        List<StudentDTO> list = new ArrayList<StudentDTO>();
-        Connection con = null;
-
-        try {
-            con = DriverManager.getConnection(url, userid, passwd);
-            list = dao.searchByName(con, name);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (con != null) con.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return list;
-    }
 }

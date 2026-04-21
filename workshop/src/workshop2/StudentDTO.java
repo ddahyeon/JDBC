@@ -2,27 +2,24 @@ package workshop2;
 
 public class StudentDTO {
 
-    private String stuNo;
-    private String departNo;
-    private String stuName;
-    private String stuSsn;
-    private String stuAddress;
-    private String entDate;
-    private char absYn;
-    private String coachProfessorNo;
-
-    public StudentDTO() {}
-
-    public StudentDTO(String stuNo, String departNo, String stuName, String stuSsn,
-                      String stuAddress, String entDate, char absYn, String coachProfessorNo) {
-        this.stuNo = stuNo;
-        this.departNo = departNo;
-        this.stuName = stuName;
-        this.stuSsn = stuSsn;
-        this.stuAddress = stuAddress;
-        this.entDate = entDate;
-        this.absYn = absYn;
-        this.coachProfessorNo = coachProfessorNo;
+	private String stuNo;
+	private String departNo;
+	private String stuName;
+	private String stuSsn;
+	private String stuAddress;
+	private String entDate;
+	private String absYn;
+	private String coachProfessorNo;
+	
+	public StudentDTO() {}
+	public StudentDTO(String stuNo, String stuName, String stuSsn, String stuAddress, String entDate,
+			String absYn) {
+		this.stuNo = stuNo;
+		this.stuName = stuName;
+		this.stuSsn = stuSsn;
+		this.stuAddress = stuAddress;
+		this.entDate = entDate;
+		this.absYn = absYn;
     }
 
     public String getStuNo() {
@@ -73,11 +70,11 @@ public class StudentDTO {
         this.entDate = entDate;
     }
 
-    public char getAbsYn() {
+    public String getAbsYn() {
         return absYn;
     }
 
-    public void setAbsYn(char absYn) {
+    public void setAbsYn(String absYn) {
         this.absYn = absYn;
     }
 

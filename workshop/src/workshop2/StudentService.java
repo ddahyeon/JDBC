@@ -1,9 +1,9 @@
 package workshop2;
 
-import java.util.List;
+import java.util.ArrayList;
+import workshop2.StudentDTO;
 
 public interface StudentService {
-    public abstract void setDAO(StudentDAO dao);
-    public abstract List<StudentDTO> list();
-    List<StudentDTO> searchByName(String name);
+	public ArrayList<StudentDTO> selectAllStudent();
+	public ArrayList<StudentDTO> selectByName(String str);
 }
