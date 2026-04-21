@@ -14,6 +14,7 @@ JDBC ( Java DataBase Connectivity )
     어떤 DBMS건 동일한 메서드로 접근한다.
   - JDBC는 비런타임 계열의 예외(SQLException)가 발생됨. 따라서 try~catch 또는 throws로 반드시 예외처리해야 됨.
   - JDBC는 기본적으로 auto commit임. ( 필요시 비활성 가능 ) 
+  - 일반 standard alone 롼경 및 웹 환경에서도 JDBC 사용가능 
 
 
 3. 일관된 방법 구현?
