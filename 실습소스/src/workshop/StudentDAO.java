@@ -5,51 +5,47 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
+
+import workshop.StudentDTO;
 
 public class StudentDAO {
 
-    public List<StudentDTO> list(Connection con) {
-        List<StudentDTO> list = new ArrayList<StudentDTO>();
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+	public ArrayList<StudentDTO> selectAllStudent(Connection con) {
+		ArrayList<StudentDTO> list = new ArrayList<StudentDTO>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 
-        String sql = "select student_no, department_no, student_name, student_ssn, "
-                   + "student_address, entrance_date, absence_yn, coach_professor_no "
-                   + "from tb_student";
-
-        try {
-            pstmt = con.prepareStatement(sql);
-            rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                String stuNo = rs.getString("student_no");
-                String departNo = rs.getString("department_no");
-                String stuName = rs.getString("student_name");
-                String stuSsn = rs.getString("student_ssn");
-                String stuAddress = rs.getString("student_address");
-                String entDate = rs.getString("entrance_date");
-                char absYn = rs.getString("absence_yn").charAt(0);
-                String coachProfessorNo = rs.getString("coach_professor_no");
-
-                StudentDTO dto = new StudentDTO(
-                        stuNo, departNo, stuName, stuSsn,
-                        stuAddress, entDate, absYn, coachProfessorNo
-                );
-                list.add(dto);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (pstmt != null) pstmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return list;
-    }
+		String sql = "select student_no 학번, student_name 이름, "
+				+ " rpad(substr(student_ssn, 1, 8), 14, '*') 주민번호, "
+				+ " concat(substr(student_address, 1, 10),'...' ) 주소, "
+				+ " DATE_FORMAT(entrance_date,'%Y/%m/%d') 입학년도, "
+				+ " absence_yn 휴학여부";
+			   sql += " from tb_student order by 1 ";
+		try {
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				String stuNo = rs.getString("학번");
+				String stuName = rs.getString("이름");
+				String stuSsn = rs.getString("주민번호");
+				String stuAdress = rs.getString("주소");
+				String entDate = rs.getString("입학년도");
+				String absYn = rs.getString("휴학여부");
+				
+				StudentDTO s = new StudentDTO(stuNo, stuName, stuSsn, stuAdress, entDate, absYn);
+				list.add(s);	
+			}
+				
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(rs!=null) rs.close();
+				if(pstmt!=null) pstmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}
 }
