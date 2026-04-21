@@ -9,7 +9,7 @@ import java.util.List;
 public class StudentServiceImpl implements StudentService {
 
     String driver = "com.mysql.cj.jdbc.Driver";
-    String url = "jdbc:mysql://localhost:3306/workshop?serverTimezone=Asia/Seoul";
+    String url = "jdbc:mysql://localhost:3306/workshop";
     String userid = "root";
     String passwd = "6120";
 
