@@ -8,7 +8,9 @@ import java.sql.SQLException;
 //
 public class DeptDAO {
 
-	public int insert(Connection con, DeptDTO dto) {
+	public int insert(Connection con, DeptDTO dto)
+	   throws DuplicatedDeptnoException
+	{
 		int n = 0;
 		PreparedStatement pstmt = null;
 		try {
@@ -19,7 +21,9 @@ public class DeptDAO {
 		  pstmt.setString(3, dto.getLoc());
 		  n = pstmt.executeUpdate();
 		}catch(SQLException e) {
-			e.printStackTrace();
+			//SQLIntegrityConstraintViolationException 발생
+			//e.printStackTrace();
+			throw new DuplicatedDeptnoException(dto.getDeptno()+" 값이 중복되어 예외발생됨");
 		}finally {
 			try {
 				 if(pstmt !=null) pstmt.close();

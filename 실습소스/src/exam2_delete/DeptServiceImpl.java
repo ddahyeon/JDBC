@@ -1,4 +1,4 @@
-package exam2_insert;
+package exam2_delete;
 
 
 import java.sql.Connection;
@@ -30,13 +30,13 @@ public class DeptServiceImpl implements DeptService {
 		}
 	}//end 생성자
     @Override 
-	public int insert(DeptDTO dto)
-     throws DuplicatedDeptnoException{
+	public int delete(int deptno) {
+     
     	int n = 0;
 		Connection con = null;
 	     try {
 			 con = DriverManager.getConnection(url, userid, passwd);
-			 n = dao.insert(con, dto);
+			 n = dao.delete(con, deptno);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
